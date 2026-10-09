@@ -36,21 +36,6 @@ declare module 'vue-router/auto-routes' {
       '/',
       Record<never, never>,
       Record<never, never>,
-      | '//(index)'
-      | '//second_blank'
-    >,
-    '//(index)': RouteRecordInfo<
-      '//(index)',
-      '/',
-      Record<never, never>,
-      Record<never, never>,
-      | never
-    >,
-    '//second_blank': RouteRecordInfo<
-      '//second_blank',
-      '/second_blank',
-      Record<never, never>,
-      Record<never, never>,
       | never
     >,
     '/[...path]': RouteRecordInfo<
@@ -58,6 +43,13 @@ declare module 'vue-router/auto-routes' {
       '/:path(.*)',
       { path: ParamValue<true> },
       { path: ParamValue<false> },
+      | never
+    >,
+    '/register': RouteRecordInfo<
+      '/register',
+      '/register',
+      Record<never, never>,
+      Record<never, never>,
       | never
     >,
   }
@@ -76,24 +68,6 @@ declare module 'vue-router/auto-routes' {
     'src/pages/index.vue': {
       routes:
         | '/'
-        | '//(index)'
-        | '//second_blank'
-      views:
-        | 'default'
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/(index).vue': {
-      routes:
-        | '//(index)'
-      views:
-        | never
-      pathParamNames:
-        | never
-    }
-    'src/pages/index/second_blank.vue': {
-      routes:
-        | '//second_blank'
       views:
         | never
       pathParamNames:
@@ -106,6 +80,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | 'path'
+    }
+    'src/pages/register.vue': {
+      routes:
+        | '/register'
+      views:
+        | never
+      pathParamNames:
+        | never
     }
   }
 
