@@ -12,7 +12,7 @@
               </q-card-section>
 
               <q-card-actions align="center">
-                <q-btn label="Login" color="primary" class="full-width" no-caps />
+                <q-btn label="Login" color="primary" class="full-width" no-caps to="/homepage"/>
               </q-card-actions>
 
             </q-card>
