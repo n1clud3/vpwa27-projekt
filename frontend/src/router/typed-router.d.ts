@@ -45,16 +45,38 @@ declare module 'vue-router/auto-routes' {
       { path: ParamValue<false> },
       | never
     >,
-    '/homepage': RouteRecordInfo<
-      '/homepage',
-      '/homepage',
+    '/auth': RouteRecordInfo<
+      '/auth',
+      '/auth',
+      Record<never, never>,
+      Record<never, never>,
+      | '/auth/login'
+      | '/auth/register'
+    >,
+    '/auth/login': RouteRecordInfo<
+      '/auth/login',
+      '/auth/login',
       Record<never, never>,
       Record<never, never>,
       | never
     >,
-    '/register': RouteRecordInfo<
-      '/register',
-      '/register',
+    '/auth/register': RouteRecordInfo<
+      '/auth/register',
+      '/auth/register',
+      Record<never, never>,
+      Record<never, never>,
+      | never
+    >,
+    '/chat': RouteRecordInfo<
+      '/chat',
+      '/chat',
+      Record<never, never>,
+      Record<never, never>,
+      | '/chat/'
+    >,
+    '/chat/': RouteRecordInfo<
+      '/chat/',
+      '/chat',
       Record<never, never>,
       Record<never, never>,
       | never
@@ -88,17 +110,44 @@ declare module 'vue-router/auto-routes' {
       pathParamNames:
         | 'path'
     }
-    'src/pages/homepage.vue': {
+    'src/pages/auth.vue': {
       routes:
-        | '/homepage'
+        | '/auth'
+        | '/auth/login'
+        | '/auth/register'
+      views:
+        | 'default'
+      pathParamNames:
+        | never
+    }
+    'src/pages/auth/login.vue': {
+      routes:
+        | '/auth/login'
       views:
         | never
       pathParamNames:
         | never
     }
-    'src/pages/register.vue': {
+    'src/pages/auth/register.vue': {
       routes:
-        | '/register'
+        | '/auth/register'
+      views:
+        | never
+      pathParamNames:
+        | never
+    }
+    'src/pages/chat.vue': {
+      routes:
+        | '/chat'
+        | '/chat/'
+      views:
+        | 'default'
+      pathParamNames:
+        | never
+    }
+    'src/pages/chat/index.vue': {
+      routes:
+        | '/chat/'
       views:
         | never
       pathParamNames:
