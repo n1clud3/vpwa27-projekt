@@ -1,5 +1,5 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="text-h4">Welcome to the Homepage</div>
+  <q-page padding>
+    <div class="text-weight-regular text-italic">Select a channel to begin chatting.</div>
   </q-page>
 </template>

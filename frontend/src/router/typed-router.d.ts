@@ -81,12 +81,20 @@ declare module 'vue-router/auto-routes' {
       Record<never, never>,
       Record<never, never>,
       | '/chat/'
+      | '/chat/[id]'
     >,
     '/chat/': RouteRecordInfo<
       '/chat/',
       '/chat',
       Record<never, never>,
       Record<never, never>,
+      | never
+    >,
+    '/chat/[id]': RouteRecordInfo<
+      '/chat/[id]',
+      '/chat/:id',
+      { id: ParamValue<true> },
+      { id: ParamValue<false> },
       | never
     >,
   }
@@ -157,6 +165,7 @@ declare module 'vue-router/auto-routes' {
       routes:
         | '/chat'
         | '/chat/'
+        | '/chat/[id]'
       views:
         | 'default'
       pathParamNames:
@@ -169,6 +178,14 @@ declare module 'vue-router/auto-routes' {
         | never
       pathParamNames:
         | never
+    }
+    'src/pages/chat/[id].vue': {
+      routes:
+        | '/chat/[id]'
+      views:
+        | never
+      pathParamNames:
+        | 'id'
     }
   }
 
