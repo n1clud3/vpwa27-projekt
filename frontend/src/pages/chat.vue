@@ -1,11 +1,9 @@
 <template>
-  <q-layout view="hHh LpR fFf">
+  <q-layout view="hHh LpR lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn dense flat round icon="groups" @click="toggleChannelDrawer" />
-        <q-toolbar-title>
-          Hejju
-        </q-toolbar-title>
+        <q-toolbar-title> Hejju </q-toolbar-title>
       </q-toolbar>
     </q-header>
 
@@ -17,15 +15,20 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer>
+      <input-bar />
+    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import ChannelList from '@/components/ChannelList.vue';
-import { ref } from 'vue'
+import InputBar from '@/components/InputBar.vue';
+import { ref } from 'vue';
 
-const channelDrawerOpen = ref(false)
+const channelDrawerOpen = ref(false);
 const toggleChannelDrawer = () => {
-  channelDrawerOpen.value = !channelDrawerOpen.value
-}
+  channelDrawerOpen.value = !channelDrawerOpen.value;
+};
 </script>
