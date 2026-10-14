@@ -3,11 +3,11 @@
     <div class="q-pa-md" style="width: 100%; max-width: 400px">
       <q-card>
         <q-card-section>
-          <q-input outlined v-model="username" label="Username" class="q-mb-md" />
-          <q-input outlined v-model="password" label="Password" type="password" class="q-mb-md" />
+          <q-input outlined v-model="inputUsername" label="Username" class="q-mb-md" />
+          <q-input outlined v-model="inputPassword" label="Password" type="password" class="q-mb-md" />
         </q-card-section>
         <q-card-actions align="center">
-          <q-btn label="Login" color="primary" class="full-width" no-caps to="/chat" />
+          <q-btn label="Login" color="primary" class="full-width" no-caps @click="handleLogin" />
         </q-card-actions>
       </q-card>
       <div class="q-mt-md flex justify-center items-center">
@@ -18,9 +18,23 @@
   </q-page>
 </template>
 
+
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '../../stores/auth';
 
-const username = ref('');
-const password = ref('');
+const inputUsername = ref('');
+const inputPassword = ref('');
+
+const router = useRouter();
+const authStore = useAuthStore();
+
+async function handleLogin() {
+  if (inputUsername.value.trim() === '') return;
+
+  authStore.login(inputUsername.value);
+
+  await router.push('/chat');
+}
 </script>

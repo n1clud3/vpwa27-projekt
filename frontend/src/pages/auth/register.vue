@@ -18,7 +18,7 @@
 
 
         <q-card-actions align="center">
-          <q-btn label="Register" color="primary" class="full-width" no-caps to="/chat" />
+          <q-btn label="Register" color="primary" class="full-width" no-caps to="/auth/login" />
         </q-card-actions>
       </q-card>
 

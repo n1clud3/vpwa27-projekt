@@ -6,6 +6,7 @@ import {
   createWebHashHistory,
   createWebHistory,
 } from 'vue-router';
+import { useAuthStore } from '../stores/auth';
 
 /*
  * If not building with SSR mode, you can
@@ -31,6 +32,18 @@ export default defineRouter((/* { store, ssrContext } */) => {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+
+    if (to.path.startsWith('/chat') && !authStore.isAuthenticated) {
+      next('/auth/login');
+    } else if (to.path.startsWith('/auth') && authStore.isAuthenticated) {
+      next('/chat');
+    } else {
+      next();
+    }
   });
 
   // enable HMR for it

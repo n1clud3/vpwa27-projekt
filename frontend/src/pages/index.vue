@@ -1,3 +1,3 @@
 <script setup lang="ts">
-definePage({ redirect: "/chat" })
+definePage({ redirect: "/auth/login" })
 </script>
