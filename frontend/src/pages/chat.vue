@@ -15,16 +15,11 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-
-    <q-footer>
-      <input-bar />
-    </q-footer>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import ChannelList from '@/components/ChannelList.vue';
-import InputBar from '@/components/InputBar.vue';
 import { ref } from 'vue';
 
 const channelDrawerOpen = ref(false);
