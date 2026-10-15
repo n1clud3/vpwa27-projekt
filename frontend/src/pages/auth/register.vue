@@ -8,12 +8,12 @@
         </q-card-section>
 
         <q-card-section>
-          <q-input dense outlined v-model="firstName" label="First Name" class="q-mb-md" />
-          <q-input dense outlined v-model="lastName" label="Last Name" class="q-mb-md" /> 
-          <q-input dense outlined v-model="nickname" label="Nickname" class="q-mb-md" /> 
+          <q-input dense outlined v-model="firstName" label="First Name" class="q-mb-md" :rules="[val =>(val && val.length >= 3) || 'First Name must be at least 3 characters']"/>
+          <q-input dense outlined v-model="lastName" label="Last Name" class="q-mb-md" :rules="[val =>(val && val.length >= 3) || 'Last Name must be at least 3 characters']"/> 
+          <q-input dense outlined v-model="nickname" label="Nickname" class="q-mb-md" :rules="[val =>(val && val.length >= 3) || 'Nickname must be at least 3 characters']"/> 
           <q-input dense outlined v-model="email" type="email" label="Email" class="q-mb-md" />
-          <q-input dense outlined v-model="password" type="password" label="Password" class="q-mb-md" />
-          <q-input dense outlined v-model="confirmPassword" type="password" label="Confirm Password" class="q-mb-md" />
+          <q-input dense outlined v-model="password" type="password" label="Password" class="q-mb-md" :rules="[val =>(val && val.length >= 8) || 'Password must be at least 8 characters']" />
+          <q-input dense outlined v-model="confirmPassword" type="password" label="Confirm Password" class="q-mb-md" :rules="[val => val === password || 'Passwords do not match']"/>
         </q-card-section>
 
 
