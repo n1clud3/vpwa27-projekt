@@ -12,17 +12,17 @@
       <!-- Channel List -->
       <q-list>
         <q-item
-          v-for="channel in channels"
-          :key="channel.id"
-          :to="`/chat/${channel.id}`"
+          v-for="[id, meta] of Object.entries(channelsStore.channels)"
+          :key="id"
+          :to="`/chat/${id}`"
           clickable
           v-ripple
         >
           <q-item-section avatar>
-            <q-icon v-if="channel.isPublic" name="tag" />
+            <q-icon v-if="meta.isPublic" name="tag" />
             <q-icon v-else name="lock" />
           </q-item-section>
-          <q-item-section>{{ channel.name }}</q-item-section>
+          <q-item-section>{{ meta.name }}</q-item-section>
         </q-item>
       </q-list>
     </div>
@@ -66,38 +66,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { useChannelsStore } from '@/stores/channels';
+import { ref } from 'vue';
 
-interface Channel {
-  id: number;
-  name: string;
-  isPublic: boolean;
-}
+const channelsStore = useChannelsStore();
 
 // Dialog controls
 const isCreateDialogOpen = ref(false);
 const newChatName = ref('');
 const newChatIsPublic = ref(false);
 
-// Initial channels list
-const channels = reactive<Channel[]>([]);
-for (let i = 1; i <= 10; i++) {
-  channels.push({
-    id: i,
-    name: `Chat ${i}`,
-    isPublic: false,
-  });
-}
-
 function handleCreateChat() {
   const name = newChatName.value;
   const isPublic = newChatIsPublic.value;
   if (!name) return;
 
-  // new channel, needs unique id
-  const newId = channels.length > 0 ? Math.max(...channels.map((c) => c.id)) + 1 : 1;
-  channels.unshift({
-    id: newId,
+  channelsStore.add({
     name,
     isPublic,
   });
