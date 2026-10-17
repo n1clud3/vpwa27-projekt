@@ -28,7 +28,7 @@
     </div>
 
     <!-- Create Chat Dialog -->
-    <q-dialog v-model="isCreateDialogOpen">
+    <q-dialog v-model="isCreateDialogOpen" @hide="resetCreateChatDialog">
       <q-card style="min-width: 350px">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Create New Chat</div>
@@ -39,7 +39,7 @@
         <q-card-section class="q-pt-md">
           <q-input
             outlined
-            v-model="newChatName"
+            v-model.trim="newChatName"
             label="Chat Name"
             placeholder="e.g. general-discussion"
             autofocus
@@ -48,7 +48,7 @@
         </q-card-section>
 
         <q-card-section>
-          <q-toggle v-model="newChatIsPublic" toggle-order="ft" label="Public" />
+          <q-toggle v-model="newChatIsPublic" toggle-order="ft" label="Public" color="primary" />
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -90,20 +90,23 @@ for (let i = 1; i <= 10; i++) {
 }
 
 function handleCreateChat() {
-  const trimmedName = newChatName.value.trim();
-  if (!trimmedName) return;
+  const name = newChatName.value;
+  const isPublic = newChatIsPublic.value;
+  if (!name) return;
 
   // new channel, needs unique id
   const newId = channels.length > 0 ? Math.max(...channels.map((c) => c.id)) + 1 : 1;
   channels.unshift({
     id: newId,
-    name: trimmedName,
-    isPublic: newChatIsPublic.value,
+    name,
+    isPublic,
   });
 
-  // reset input for new chat creation
+  isCreateDialogOpen.value = false;
+}
+
+function resetCreateChatDialog() {
   newChatName.value = '';
   newChatIsPublic.value = false;
-  isCreateDialogOpen.value = false;
 }
 </script>
