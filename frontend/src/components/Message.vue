@@ -30,7 +30,7 @@ import { date } from 'quasar';
 interface Props {
   username: string;
   content: string;
-  timestamp: Date | string | number;
+  timestamp?: Date | string | number;
   avatar?: string;
 }
 
@@ -45,7 +45,7 @@ const initials = computed(() =>
     .toUpperCase(),
 );
 
-const parsed = computed(() => new Date(props.timestamp));
+const parsed = computed(() => (props.timestamp !== undefined ? new Date(props.timestamp) : ''));
 
 const formattedTime = computed(() => date.formatDate(parsed.value, 'HH:mm'));
 const fullDate = computed(() => date.formatDate(parsed.value, 'DD.MM.YYYY HH:mm:ss'));
