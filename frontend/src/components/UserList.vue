@@ -7,16 +7,16 @@
       </div>
 
       <q-list>
-        <!-- current user -->
+        <!-- Current User Item -->
         <q-item clickable v-ripple>
           <q-item-section avatar min-width="40px">
             <q-avatar size="36px" color="grey-3" text-color="grey-8">
               <q-icon name="person_outline" />
-              <!-- status indicator badge -->
+              <!-- Dynamic Status Indicator Badge -->
               <q-badge
                 floating
                 rounded
-                :color="isOnline ? 'positive' : 'grey-5'"
+                :color="statusBadgeColor"
                 style="top: 24px; right: -2px;"
               />
             </q-avatar>
@@ -39,13 +39,27 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useAuthStore } from '../stores/auth';
 
-// status and nickname as props from the parent
-defineProps<{
-  isOnline: boolean;
+type UserStatus = 'online' | 'dnd' | 'offline';
+
+const props = defineProps<{
+  status: UserStatus;
   nickname: string;
 }>();
 
 const authStore = useAuthStore();
+
+// Compute badge color based on status prop
+const statusBadgeColor = computed(() => {
+  switch (props.status) {
+    case 'online':
+      return 'positive'; // Green
+    case 'dnd':
+      return 'negative'; // Red
+    case 'offline':
+      return 'grey-5';  // Grey
+  }
+});
 </script>
