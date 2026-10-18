@@ -1,9 +1,11 @@
 <template>
   <q-page padding class="page" :style-fn="pageHeight">
-    <div class="text-subtitle2 text-grey-7 text-uppercase">Chat {{ route.params.id }}</div>
+    <div class="text-subtitle2 text-grey-7 text-lowercase">
+      #{{ channelMeta !== undefined ? channelMeta.name : 'Unknown chat' }}
+    </div>
 
     <div ref="scroller" class="messages scroll">
-      <q-infinite-scroll :key="route.params.id" reverse :offset="150" @load="onLoad">
+      <q-infinite-scroll :key="channelId" reverse :offset="150" @load="onLoad">
         <template #loading>
           <div class="row justify-center q-my-md">
             <q-spinner color="primary" size="32px" />
@@ -30,9 +32,11 @@ import Message from '@/components/Message.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRoute } from 'vue-router';
 import { nextTick, ref, watch } from 'vue';
+import { useChannelsStore } from '@/stores/channels';
 
 const route = useRoute('/chat/[id]');
 const user = useAuthStore();
+const channels = useChannelsStore();
 
 interface MessageData {
   id: number;
@@ -40,6 +44,9 @@ interface MessageData {
   content: string;
   timestamp: Date;
 }
+
+const channelId = Number(route.params.id);
+const channelMeta = channels.get(channelId);
 
 const PAGE_SIZE = 30;
 const TOTAL = 100; // pretend the server has 100 messages
