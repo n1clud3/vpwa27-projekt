@@ -2,20 +2,33 @@
   <q-layout view="hHh LpR lFf">
     <q-header elevated>
       <q-toolbar>
+        <!-- Toggle Left Drawer (Channels) -->
         <q-btn dense flat round icon="groups" @click="toggleChannelDrawer" />
+        
         <q-toolbar-title> Hejju </q-toolbar-title>
 
-        <!-- Profile -->
+        <!-- Toggle Right Drawer (Users) -->
+        <q-btn 
+          dense 
+          flat 
+          round 
+          icon="people" 
+          @click="toggleUserDrawer" 
+          class="q-mr-xs"
+        >
+          <q-tooltip>Toggle Member List</q-tooltip>
+        </q-btn>
+
+        <!-- Profile Dropdown -->
         <q-btn flat round dense class="q-ml-sm">
           <q-avatar size="36px" color="grey-4" text-color="grey-8">
             <q-icon name="person_outline" size="24px" />
           </q-avatar>
 
-          <!-- Menu -->
+          <!-- Profile Menu -->
           <q-menu class="q-pa-xs" style="min-width: 220px">
             <q-list style="min-width: 200px">
               
-              <!-- info about user -->
               <q-item>
                 <q-item-section avatar>
                   <q-avatar size="40px" color="grey-3" text-color="grey-8">
@@ -34,7 +47,6 @@
 
               <q-separator class="q-my-xs" />
 
-              <!-- status, will need to implement later the function..-->
               <q-item>
                 <q-item-section>
                   <q-item-label>Status</q-item-label>
@@ -53,7 +65,6 @@
 
               <q-separator class="q-my-xs" />
 
-              <!-- Logout Button -->
               <q-item clickable v-close-popup @click="handleLogout" class="text-negative">
                 <q-item-section avatar>
                   <q-icon name="logout" color="negative" />
@@ -67,13 +78,17 @@
           </q-menu>
         </q-btn>
 
-
       </q-toolbar>
     </q-header>
 
+    <!-- Left Drawer: Channels List -->
     <q-drawer show-if-above v-model="channelDrawerOpen" side="left" bordered :width="280">
-      <!-- drawer content -->
       <channel-list />
+    </q-drawer>
+
+    <!-- Right Drawer: Chat Users Component -->
+    <q-drawer show-if-above v-model="userDrawerOpen" side="right" bordered :width="240">
+      <user-list :is-online="isOnline" :nickname="nickname" />
     </q-drawer>
 
     <q-page-container>
@@ -84,6 +99,7 @@
 
 <script setup lang="ts">
 import ChannelList from '@/components/ChannelList.vue';
+import UserList from '@/components/UserList.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
@@ -91,6 +107,11 @@ import { useAuthStore } from '../stores/auth';
 const channelDrawerOpen = ref(false);
 const toggleChannelDrawer = () => {
   channelDrawerOpen.value = !channelDrawerOpen.value;
+};
+
+const userDrawerOpen = ref(true);
+const toggleUserDrawer = () => {
+  userDrawerOpen.value = !userDrawerOpen.value;
 };
 
 const router = useRouter();
@@ -103,5 +124,4 @@ async function handleLogout() {
   authStore.logout();
   await router.push('/auth/login');
 }
-
 </script>
