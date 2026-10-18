@@ -7,6 +7,13 @@
     </q-item>
   </q-list>
 
+  <div v-if="hasMention && !isCommand" class="mention-preview">
+    <template v-for="(part, i) in parts" :key="i">
+      <span v-if="i % 2" class="mention">{{ part }}</span>
+      <template v-else>{{ part }}</template>
+    </template>
+  </div>
+
   <q-input
     v-model="text"
     standout="bg-primary text-white"
@@ -42,6 +49,9 @@ const emit = defineEmits<{
 const text = ref('');
 const isCommand = computed(() => text.value.startsWith('/'));
 
+const parts = computed(() => text.value.split(/(@[\w-]+)/));
+const hasMention = computed(() => parts.value.length > 1);
+
 function submit() {
   const value = text.value.trim();
   if (!value) return;
@@ -74,6 +84,22 @@ function submit() {
 
   .param {
     background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.mention-preview {
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  opacity: 0.9;
+
+  .mention {
+    color: var(--q-primary);
+    background-color: rgba(25, 118, 210, 0.15);
+    border-radius: 4px;
+    padding: 0 3px;
+    font-weight: 500;
   }
 }
 </style>
