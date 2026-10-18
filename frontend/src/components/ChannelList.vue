@@ -19,8 +19,7 @@
           v-ripple
         >
           <q-item-section avatar>
-            <q-icon v-if="meta.isPublic" name="tag" />
-            <q-icon v-else name="lock" />
+            <q-icon :name="meta.isPublic ? 'tag' : 'lock'" />
           </q-item-section>
           <q-item-section>{{ meta.name }}</q-item-section>
         </q-item>
