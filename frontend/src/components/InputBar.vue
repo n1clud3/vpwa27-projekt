@@ -1,5 +1,19 @@
-<!-- src/components/InputBar.vue -->
 <template>
+  <q-list v-if="isCommand">
+    <q-item v-for="command in commands.list" :key="command.name" class="command-entry">
+      <span class="text-bold name">/{{ command.name }}</span>
+      <span v-for="param in command.params" :key="param.name" class="param"> {{ param.name }}</span>
+      <span class="desc">{{ command.description }}</span>
+    </q-item>
+  </q-list>
+
+  <div v-if="hasMention && !isCommand" class="mention-preview">
+    <template v-for="(part, i) in parts" :key="i">
+      <span v-if="i % 2" class="mention">{{ part }}</span>
+      <template v-else>{{ part }}</template>
+    </template>
+  </div>
+
   <q-input
     v-model="text"
     standout="bg-primary text-white"
@@ -21,6 +35,9 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
+import { useCommandsStore } from '@/stores/commands';
+
+const commands = useCommandsStore();
 
 defineProps<{ disable?: boolean }>();
 
@@ -31,6 +48,9 @@ const emit = defineEmits<{
 
 const text = ref('');
 const isCommand = computed(() => text.value.startsWith('/'));
+
+const parts = computed(() => text.value.split(/(@[\w-]+)/));
+const hasMention = computed(() => parts.value.length > 1);
 
 function submit() {
   const value = text.value.trim();
@@ -45,3 +65,41 @@ function submit() {
   text.value = '';
 }
 </script>
+
+<style lang="scss" scoped>
+.command-entry {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: start;
+  gap: 0.5rem;
+
+  font-family: 'Roboto Mono', monospace;
+
+  .param,
+  .name,
+  .desc {
+    padding: 5px 10px;
+  }
+
+  .param {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+.mention-preview {
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  opacity: 0.9;
+
+  .mention {
+    color: var(--q-primary);
+    background-color: rgba(25, 118, 210, 0.15);
+    border-radius: 4px;
+    padding: 0 3px;
+    font-weight: 500;
+  }
+}
+</style>

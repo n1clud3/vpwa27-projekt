@@ -31,7 +31,7 @@ import InputBar from '@/components/InputBar.vue';
 import Message from '@/components/Message.vue';
 import { useAuthStore } from '@/stores/auth';
 import { useRoute } from 'vue-router';
-import { nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref, watch } from 'vue';
 import { useChannelsStore } from '@/stores/channels';
 
 const route = useRoute('/chat/[id]');
@@ -45,8 +45,8 @@ interface MessageData {
   timestamp: Date;
 }
 
-const channelId = Number(route.params.id);
-const channelMeta = channels.getChannelById(channelId);
+const channelId = computed(() => Number(route.params.id));
+const channelMeta = computed(() => channels.get(channelId.value));
 
 const PAGE_SIZE = 30;
 const TOTAL = 100; // pretend the server has 100 messages
