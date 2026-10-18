@@ -1,18 +1,10 @@
 <template>
   <q-scroll-area class="fit">
     <div class="q-pa-md">
-      
       <!-- Header with Channels title and Create button -->
       <div class="row items-center justify-between q-mb-sm">
         <div class="text-subtitle2 text-grey-7 text-uppercase">Channels</div>
-        <q-btn
-          flat
-          round
-          dense
-          icon="add"
-          color="primary"
-          @click="isCreateDialogOpen = true"
-        >
+        <q-btn flat round dense icon="add" color="primary" @click="isCreateDialogOpen = true">
           <q-tooltip>Create new chat</q-tooltip>
         </q-btn>
       </div>
@@ -20,7 +12,7 @@
       <!-- Channel List -->
       <q-list>
         <q-item
-          v-for="channel in channelsStore.channels"
+          v-for="channel in channelsStore.list"
           :key="channel.id"
           :to="`/chat/${channel.id}`"
           clickable
@@ -50,7 +42,6 @@
           </q-item-section>
         </q-item>
       </q-list>
-
     </div>
 
     <!-- Create Chat Dialog -->
@@ -77,14 +68,9 @@
           <div class="row items-center justify-between q-py-xs">
             <div>
               <div class="text-body2 text-weight-medium">Private Channel</div>
-              <div class="text-caption text-grey-7">
-                Only invited members can view this channel
-              </div>
+              <div class="text-caption text-grey-7">Only invited members can view this channel</div>
             </div>
-            <q-toggle
-              v-model="isPrivate"
-              color="primary"
-            />
+            <q-toggle v-model="isPrivate" color="primary" />
           </div>
         </q-card-section>
 
@@ -121,7 +107,7 @@ function handleCreateChat() {
   const trimmedName = newChatName.value.trim();
   if (!trimmedName) return;
 
-  channelsStore.addChannel(trimmedName, isPrivate.value);
+  channelsStore.add(trimmedName, isPrivate.value);
 
   // Reset input and close modal
   newChatName.value = '';

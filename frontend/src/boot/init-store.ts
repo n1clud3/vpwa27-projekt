@@ -1,14 +1,10 @@
 import { defineBoot } from '#q-app';
+import { useChannelsStore } from '@/stores/channels';
 import { useCommandsStore } from '@/stores/commands';
+import { useNotificationsStore } from '@/stores/notifications';
 
-export default defineBoot(({router}) => {
-  console.log('boot running')
-  router.beforeEach((to, from) => {
-    console.log('nav', from.path, '->', to.path)
-  })
-
+function initCommands() {
   const commands = useCommandsStore();
-
   commands.add({
     name: "join",
     availableOutOfChannel: false,
@@ -36,4 +32,29 @@ export default defineBoot(({router}) => {
       }
     ]
   });
+}
+
+function initChannels() {
+  const channels = useChannelsStore();
+
+  channels.add("general", false);
+}
+
+function initNotifications() {
+  const notifications = useNotificationsStore();
+
+  for (let i = 0; i < 10; i++) {
+    notifications.add({
+      channelId: 1,
+      fromUser: "johndoe",
+      content: `message test #${i}`,
+      timestamp: new Date(),
+    })
+  }
+}
+
+export default defineBoot(() => {
+  initCommands();
+  initChannels();
+  initNotifications();
 });

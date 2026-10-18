@@ -8,27 +8,27 @@ export interface Channel {
 }
 
 export const useChannelsStore = defineStore('channels', () => {
-  const channels = ref<Channel[]>([]);
+  const list = ref<Channel[]>([]);
 
-  function addChannel(name: string, isPrivate: boolean = false) {
-    const newId = channels.value.length > 0 
-      ? Math.max(...channels.value.map(c => c.id)) + 1 
+  function add(name: string, isPrivate: boolean = false) {
+    const newId = list.value.length > 0
+      ? Math.max(...list.value.map(c => c.id)) + 1
       : 1;
-    
-    channels.value.unshift({
+
+    list.value.unshift({
       id: newId,
       name,
       isPrivate,
     });
   }
 
-  function getChannelById(id: number) {
-    return channels.value.find(c => c.id === id);
+  function byId(id: number): Channel | undefined {
+    return list.value.find(c => c.id === id);
   }
 
   return {
-    channels,
-    addChannel,
-    getChannelById,
+    list,
+    add,
+    byId,
   };
 });

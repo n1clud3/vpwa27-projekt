@@ -5,6 +5,8 @@
         <q-btn dense flat round icon="groups" @click="toggleChannelDrawer" />
         <q-toolbar-title> Hejju </q-toolbar-title>
 
+        <q-btn dense flat round icon="notifications" :to="`/chat/notifications`" />
+
         <!-- Profile Dropdown -->
         <q-btn flat round dense class="q-ml-sm">
           <q-avatar size="36px" color="grey-4" text-color="grey-8">
@@ -14,7 +16,6 @@
           <!-- Profile Menu -->
           <q-menu class="q-pa-xs" style="min-width: 220px">
             <q-list style="min-width: 200px">
-              
               <!-- User Info Header -->
               <q-item>
                 <q-item-section avatar>
@@ -26,9 +27,7 @@
                   <q-item-label class="text-weight-bold">
                     {{ authStore.username || 'User' }}
                   </q-item-label>
-                  <q-item-label caption>
-                    @{{ nickname }}
-                  </q-item-label>
+                  <q-item-label caption> @{{ nickname }} </q-item-label>
                 </q-item-section>
               </q-item>
 
@@ -73,11 +72,8 @@
                 <q-item-section avatar>
                   <q-icon name="logout" color="negative" />
                 </q-item-section>
-                <q-item-section class="text-weight-bold">
-                  Logout
-                </q-item-section>
+                <q-item-section class="text-weight-bold"> Logout </q-item-section>
               </q-item>
-
             </q-list>
           </q-menu>
         </q-btn>
@@ -127,12 +123,12 @@ const userStatus = ref<UserStatus>('online');
 const statusOptions = [
   { label: 'Online', value: 'online', color: 'positive' },
   { label: 'Do Not Disturb', value: 'dnd', color: 'negative' },
-  { label: 'Offline', value: 'offline', color: 'grey-6' }
+  { label: 'Offline', value: 'offline', color: 'grey-6' },
 ];
 
 // Dynamically matches badge color to active status
 const statusColor = computed(() => {
-  const found = statusOptions.find(opt => opt.value === userStatus.value);
+  const found = statusOptions.find((opt) => opt.value === userStatus.value);
   return found ? found.color : 'positive';
 });
 
