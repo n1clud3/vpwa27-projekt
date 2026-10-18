@@ -46,7 +46,7 @@ interface MessageData {
 }
 
 const channelId = computed(() => Number(route.params.id));
-const channelMeta = computed(() => channels.get(channelId.value));
+const channelMeta = computed(() => channels.getChannelById(channelId.value));
 
 const PAGE_SIZE = 30;
 const TOTAL = 100; // pretend the server has 100 messages
