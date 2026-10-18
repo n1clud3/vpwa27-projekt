@@ -1,5 +1,3 @@
-HTML
-
 <template>
   <q-scroll-area class="fit">
     <div class="q-pa-md">
@@ -28,8 +26,9 @@ HTML
           clickable
           v-ripple
         >
+          <!-- Dynamic Icon: lock if private, tag if public -->
           <q-item-section avatar min-width="32px">
-            <q-icon name="tag" />
+            <q-icon :name="channel.isPrivate ? 'lock' : 'tag'" />
           </q-item-section>
 
           <!-- Channel Name -->
@@ -63,7 +62,8 @@ HTML
           <q-btn icon="close" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-card-section class="q-pt-md">
+        <q-card-section class="q-pt-md column q-gutter-md">
+          <!-- Chat Name Input -->
           <q-input
             outlined
             v-model="newChatName"
@@ -72,6 +72,20 @@ HTML
             autofocus
             @keyup.enter="handleCreateChat"
           />
+
+          <!-- Private Channel Toggle -->
+          <div class="row items-center justify-between q-py-xs">
+            <div>
+              <div class="text-body2 text-weight-medium">Private Channel</div>
+              <div class="text-caption text-grey-7">
+                Only invited members can view this channel
+              </div>
+            </div>
+            <q-toggle
+              v-model="isPrivate"
+              color="primary"
+            />
+          </div>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -101,14 +115,17 @@ const channelsStore = useChannelsStore();
 
 const isCreateDialogOpen = ref(false);
 const newChatName = ref('');
+const isPrivate = ref(false);
 
 function handleCreateChat() {
   const trimmedName = newChatName.value.trim();
   if (!trimmedName) return;
 
-  channelsStore.addChannel(trimmedName);
+  channelsStore.addChannel(trimmedName, isPrivate.value);
 
+  // Reset input and close modal
   newChatName.value = '';
+  isPrivate.value = false;
   isCreateDialogOpen.value = false;
 }
 </script>
