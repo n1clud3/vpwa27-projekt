@@ -7,25 +7,13 @@
         
         <q-toolbar-title> Hejju </q-toolbar-title>
 
-        <!-- Toggle Right Drawer (Users) -->
-        <q-btn 
-          dense 
-          flat 
-          round 
-          icon="people" 
-          @click="toggleUserDrawer" 
-          class="q-mr-xs"
-        >
-          <q-tooltip>Toggle Member List</q-tooltip>
-        </q-btn>
-
         <!-- Profile Dropdown -->
         <q-btn flat round dense class="q-ml-sm">
           <q-avatar size="36px" color="grey-4" text-color="grey-8">
             <q-icon name="person_outline" size="24px" />
           </q-avatar>
 
-          <!-- Profile Menu -->
+          <!-- Menu -->
           <q-menu class="q-pa-xs" style="min-width: 220px">
             <q-list style="min-width: 200px">
               
@@ -77,17 +65,16 @@
             </q-list>
           </q-menu>
         </q-btn>
-
       </q-toolbar>
     </q-header>
 
     <!-- Left Drawer: Channels List -->
     <q-drawer show-if-above v-model="channelDrawerOpen" side="left" bordered :width="280">
-      <channel-list />
+      <channel-list @toggle-user-drawer="toggleUserDrawer" />
     </q-drawer>
 
-    <!-- Right Drawer: Chat Users Component -->
-    <q-drawer show-if-above v-model="userDrawerOpen" side="right" bordered :width="240">
+    <!-- Right Drawer: Chat Users Component (Closed by default) -->
+    <q-drawer v-model="userDrawerOpen" side="right" bordered :width="240">
       <user-list :is-online="isOnline" :nickname="nickname" />
     </q-drawer>
 
@@ -109,7 +96,8 @@ const toggleChannelDrawer = () => {
   channelDrawerOpen.value = !channelDrawerOpen.value;
 };
 
-const userDrawerOpen = ref(true);
+// Right drawer (Chat Users) controls - Closed by default
+const userDrawerOpen = ref(false);
 const toggleUserDrawer = () => {
   userDrawerOpen.value = !userDrawerOpen.value;
 };

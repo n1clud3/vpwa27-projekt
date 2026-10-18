@@ -1,27 +1,29 @@
-import { defineStore, acceptHMRUpdate } from 'pinia';
+import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { Channel, ChannelList } from '@/types/channels';
+
+export interface Channel {
+  id: number;
+  name: string;
+}
 
 export const useChannelsStore = defineStore('channels', () => {
-  const channels = ref<ChannelList>({});
-  let nextId = 1;
+  const channels = ref<Channel[]>([]);
 
-  function add(data: Channel) {
-    const id = nextId++;
-    channels.value[id] = data;
+  function addChannel(name: string) {
+    const newId = channels.value.length > 0 
+      ? Math.max(...channels.value.map(c => c.id)) + 1 
+      : 1;
+    
+    channels.value.unshift({ id: newId, name });
   }
 
-  function get(id: number) {
-    return channels.value[id];
+  function getChannelById(id: number) {
+    return channels.value.find(c => c.id === id);
   }
 
   return {
     channels,
-    add,
-    get,
-  }
+    addChannel,
+    getChannelById,
+  };
 });
-
-if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(useChannelsStore, import.meta.hot));
-}
