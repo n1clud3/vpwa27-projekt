@@ -132,10 +132,10 @@ const statusColor = computed(() => {
   return found ? found.color : 'positive';
 });
 
-const nickname = ref(authStore.username ? `${authStore.username}_dev` : 'user_nick');
+const nickname = computed(() => authStore.nickName);
 
 async function handleLogout() {
-  authStore.logout();
+  await authStore.logout();
   await router.push('/auth/login');
 }
 </script>

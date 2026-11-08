@@ -34,16 +34,17 @@ export default defineRouter((/* { store, ssrContext } */) => {
     history: createHistory(import.meta.env.QUASAR_VUE_ROUTER_BASE),
   });
 
-  Router.beforeEach((to, from, next) => {
+  Router.beforeEach(async (to) => {
     const authStore = useAuthStore();
+    await authStore.restoreSession();
 
     if (to.path.startsWith('/chat') && !authStore.isAuthenticated) {
-      next('/auth/login');
-    } else if (to.path.startsWith('/auth') && authStore.isAuthenticated) {
-      next('/chat');
-    } else {
-      next();
+      return '/auth/login';
     }
+    if (to.path.startsWith('/auth') && authStore.isAuthenticated) {
+      return '/chat';
+    }
+    return true;
   });
 
   // enable HMR for it
