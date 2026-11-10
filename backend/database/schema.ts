@@ -8,7 +8,18 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class AuthAccessTokenSchema extends BaseModel {
-  static $columns = ['abilities', 'createdAt', 'expiresAt', 'hash', 'id', 'lastUsedAt', 'name', 'tokenableId', 'type', 'updatedAt'] as const
+  static $columns = [
+    'abilities',
+    'createdAt',
+    'expiresAt',
+    'hash',
+    'id',
+    'lastUsedAt',
+    'name',
+    'tokenableId',
+    'type',
+    'updatedAt',
+  ] as const
   $columns = AuthAccessTokenSchema.$columns
   @column()
   declare abilities: string
@@ -48,7 +59,14 @@ export class BanSchema extends BaseModel {
 }
 
 export class ChannelMemberSchema extends BaseModel {
-  static $columns = ['channelId', 'id', 'joinedAt', 'lastReadMessage', 'notificationPreference', 'userId'] as const
+  static $columns = [
+    'channelId',
+    'id',
+    'joinedAt',
+    'lastReadMessage',
+    'notificationPreference',
+    'userId',
+  ] as const
   $columns = ChannelMemberSchema.$columns
   @column()
   declare channelId: number
@@ -82,7 +100,14 @@ export class ChannelSchema extends BaseModel {
 }
 
 export class InviteSchema extends BaseModel {
-  static $columns = ['channelId', 'createdAt', 'id', 'invitedBy', 'invitedUserId', 'status'] as const
+  static $columns = [
+    'channelId',
+    'createdAt',
+    'id',
+    'invitedBy',
+    'invitedUserId',
+    'status',
+  ] as const
   $columns = InviteSchema.$columns
   @column()
   declare channelId: number
@@ -142,7 +167,17 @@ export class MessageSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'firstName', 'id', 'lastName', 'nickName', 'password', 'status', 'updatedAt'] as const
+  static $columns = [
+    'createdAt',
+    'email',
+    'firstName',
+    'id',
+    'lastName',
+    'nickName',
+    'password',
+    'status',
+    'updatedAt',
+  ] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
