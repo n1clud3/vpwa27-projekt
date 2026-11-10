@@ -6,38 +6,38 @@ import { useNotificationsStore } from '@/stores/notifications';
 function initCommands() {
   const commands = useCommandsStore();
   commands.add({
-    name: "join",
+    name: 'join',
     availableOutOfChannel: false,
-    description: "Join a channel",
+    description: 'Join a channel',
     params: [
       {
-        name: "channel-name",
+        name: 'channel-name',
         mandatory: true,
-      }
-    ]
+      },
+    ],
   });
 
   commands.add({
-    name: "mute",
+    name: 'mute',
     availableOutOfChannel: true,
-    description: "Mute a member in this channel",
+    description: 'Mute a member in this channel',
     params: [
       {
-        name: "username",
+        name: 'username',
         mandatory: true,
       },
       {
-        name: "duration",
+        name: 'duration',
         mandatory: false,
-      }
-    ]
+      },
+    ],
   });
 }
 
 function initChannels() {
   const channels = useChannelsStore();
 
-  channels.add("general", false);
+  channels.add('general', false);
 }
 
 function initNotifications() {
@@ -46,10 +46,10 @@ function initNotifications() {
   for (let i = 0; i < 10; i++) {
     notifications.add({
       channelId: 1,
-      fromUser: "johndoe",
+      fromUser: 'johndoe',
       content: `message test #${i}`,
       timestamp: new Date(),
-    })
+    });
   }
 }
 

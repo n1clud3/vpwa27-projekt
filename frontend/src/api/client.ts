@@ -22,14 +22,14 @@ export async function api<T>(
     'Content-Type': 'application/json',
     Accept: 'application/json',
   };
-  
+
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const init: RequestInit = {
     method: options.method ?? 'GET',
     headers,
   };
-  
+
   if (options.body !== undefined) init.body = JSON.stringify(options.body);
 
   const response = await fetch(`${BASE_URL}${path}`, init);
@@ -38,10 +38,7 @@ export async function api<T>(
 
   if (!response.ok) {
     const errors = (json as { errors?: { message: string }[] } | null)?.errors;
-    throw new ApiError(
-      response.status,
-      errors?.map((e) => e.message) ?? ['Request failed'],
-    );
+    throw new ApiError(response.status, errors?.map((e) => e.message) ?? ['Request failed']);
   }
 
   return json as T;

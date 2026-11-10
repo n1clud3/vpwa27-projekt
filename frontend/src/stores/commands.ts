@@ -15,8 +15,8 @@ export const useCommandsStore = defineStore('commands', () => {
     byName,
     list,
     add,
-  }
-})
+  };
+});
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useCommandsStore, import.meta.hot));

@@ -11,7 +11,7 @@ export default defineConfig((/* ctx */) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ["init-store"],
+    boot: ['init-store'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.scss'],
@@ -90,7 +90,7 @@ export default defineConfig((/* ctx */) => {
         notify: {
           position: 'bottom-right',
           timeout: 4000,
-        }
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set
@@ -104,7 +104,7 @@ export default defineConfig((/* ctx */) => {
       // directives: [],
 
       // Quasar plugins
-      plugins: [ "Notify" ],
+      plugins: ['Notify'],
     },
 
     // animations: 'all', // --- includes all animations

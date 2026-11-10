@@ -11,9 +11,7 @@ export const useChannelsStore = defineStore('channels', () => {
   const list = ref<Channel[]>([]);
 
   function add(name: string, isPrivate: boolean = false) {
-    const newId = list.value.length > 0
-      ? Math.max(...list.value.map(c => c.id)) + 1
-      : 1;
+    const newId = list.value.length > 0 ? Math.max(...list.value.map((c) => c.id)) + 1 : 1;
 
     list.value.unshift({
       id: newId,
@@ -23,7 +21,7 @@ export const useChannelsStore = defineStore('channels', () => {
   }
 
   function byId(id: number): Channel | undefined {
-    return list.value.find(c => c.id === id);
+    return list.value.find((c) => c.id === id);
   }
 
   return {
