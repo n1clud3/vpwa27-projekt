@@ -33,5 +33,18 @@ router
       .prefix('account')
       .as('profile')
       .use(middleware.auth())
+
+    router
+      .group(() => {
+        router.get('/', [controllers.Channels, 'index'])
+        router.post('/', [controllers.Channels, 'create'])
+        router.delete('/:id', [controllers.Channels, 'destroy'])
+        router.delete('/:id/membership', [controllers.Channels, 'leave'])
+        router.post('/invites/:id/accept', [controllers.Channels, 'acceptInvite'])
+        router.post('/invites/:id/decline', [controllers.Channels, 'declineInvite'])
+      })
+      .prefix('channels')
+      .as('channels')
+      .use(middleware.auth())
   })
   .prefix('/api/v1')

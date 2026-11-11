@@ -18,4 +18,14 @@ export interface ApiDefinition {
       destroy: typeof routes['profile.access_tokens.destroy']
     }
   }
+  channels: {
+    channels: {
+      index: typeof routes['channels.channels.index']
+      create: typeof routes['channels.channels.create']
+      destroy: typeof routes['channels.channels.destroy']
+      leave: typeof routes['channels.channels.leave']
+      acceptInvite: typeof routes['channels.channels.accept_invite']
+      declineInvite: typeof routes['channels.channels.decline_invite']
+    }
+  }
 }

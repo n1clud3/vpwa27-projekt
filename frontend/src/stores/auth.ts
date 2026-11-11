@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import { api, ApiError, TOKEN_KEY } from '../api/client';
+import { api, ApiError, TOKEN_KEY } from '@/api/client';
 
 export interface AuthUser {
   id: number;

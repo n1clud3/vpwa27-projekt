@@ -60,6 +60,84 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/access_tokens_controller').default['destroy']>>>
     }
   }
+  'channels.channels.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/channels'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['index']>>>
+    }
+  }
+  'channels.channels.create': {
+    methods: ["POST"]
+    pattern: '/api/v1/channels'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/channel').createChannelValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/channel').createChannelValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['create']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['create']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['create']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'channels.channels.destroy': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/channels/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['destroy']>>>
+    }
+  }
+  'channels.channels.leave': {
+    methods: ["DELETE"]
+    pattern: '/api/v1/channels/:id/membership'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['leave']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['leave']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['leave']>>>
+    }
+  }
+  'channels.channels.accept_invite': {
+    methods: ["POST"]
+    pattern: '/api/v1/channels/invites/:id/accept'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['acceptInvite']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['acceptInvite']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['acceptInvite']>>>
+    }
+  }
+  'channels.channels.decline_invite': {
+    methods: ["POST"]
+    pattern: '/api/v1/channels/invites/:id/decline'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['declineInvite']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['declineInvite']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['declineInvite']>>>
+    }
+  }
 }
 
 export namespace Route {
