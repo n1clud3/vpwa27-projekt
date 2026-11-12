@@ -42,6 +42,8 @@ router
         router.delete('/:id/membership', [controllers.Channels, 'leave'])
         router.post('/invites/:id/accept', [controllers.Channels, 'acceptInvite'])
         router.post('/invites/:id/decline', [controllers.Channels, 'declineInvite'])
+        router.get('/:id/messages', [controllers.Messages, 'index'])
+        router.post('/:id/messages', [controllers.Messages, 'store'])
       })
       .prefix('channels')
       .as('channels')

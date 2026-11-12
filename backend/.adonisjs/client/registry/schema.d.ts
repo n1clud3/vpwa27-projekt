@@ -138,6 +138,32 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/channels_controller').default['declineInvite']>>>
     }
   }
+  'channels.messages.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/channels/:id/messages'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['index']>>>
+    }
+  }
+  'channels.messages.store': {
+    methods: ["POST"]
+    pattern: '/api/v1/channels/:id/messages'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/message').sendMessageValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/message').sendMessageValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/messages_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
 }
 
 export namespace Route {

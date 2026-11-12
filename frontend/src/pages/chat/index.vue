@@ -1,7 +1,7 @@
 <template>
   <q-page padding class="page">
     <div class="messages text-subtitle2 text-grey-7">Select a channel to begin chatting.</div>
-    <input-bar />
+    <input-bar @send="onSend" />
   </q-page>
 </template>
 
@@ -21,4 +21,11 @@
 
 <script setup lang="ts">
 import InputBar from '@/components/InputBar.vue';
+import { useQuasar } from 'quasar';
+
+const $q = useQuasar();
+
+function onSend() {
+  $q.notify({ type: 'warning', message: 'Select a channel first to send a message.' });
+}
 </script>

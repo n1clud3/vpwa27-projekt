@@ -22,35 +22,42 @@
       </q-infinite-scroll>
     </div>
 
-    <input-bar class="input-bar" @send="addMessage" />
+    <input-bar class="input-bar" @send="sendMessage" @command="onCommand" />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import InputBar from '@/components/InputBar.vue';
 import Message from '@/components/Message.vue';
-import { useAuthStore } from '@/stores/auth';
-import { useRoute } from 'vue-router';
+import { api, ApiError, errorMessage } from '@/api/client';
+import { useQuasar } from 'quasar';
+import { useRoute, useRouter } from 'vue-router';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useChannelsStore } from '@/stores/channels';
 
+const $q = useQuasar();
+const router = useRouter();
 const route = useRoute('/chat/[id]');
-const user = useAuthStore();
 const channels = useChannelsStore();
+
+interface ApiMessage {
+  id: number;
+  content: string;
+  createdAt: string;
+  sender: { id: number; nickName: string; name: string };
+}
 
 interface MessageData {
   id: number;
   username: string;
   content: string;
-  timestamp: Date;
+  timestamp: string;
 }
+
+const PAGE_SIZE = 30;
 
 const channelId = computed(() => Number(route.params.id));
 const channelMeta = computed(() => channels.byId(channelId.value));
-
-const PAGE_SIZE = 30;
-const TOTAL = 100; // pretend the server has 100 messages
-let localCount = 0;
 
 const messages = ref<MessageData[]>([]); // oldest -> newest
 const scroller = ref<HTMLElement | null>(null);
@@ -60,41 +67,43 @@ watch(
   () => route.params.id,
   () => {
     messages.value = [];
-    localCount = 0;
   },
 );
 
-// Mock API: returns up to `limit` messages older than `beforeId`
-async function fetchMessages(beforeId: number | null, limit: number): Promise<MessageData[]> {
-  await new Promise((r) => setTimeout(r, 400));
-  const end = beforeId ?? TOTAL; // exclusive
-  const start = Math.max(0, end - limit);
-  const page: MessageData[] = [];
-  for (let i = start; i < end; i++) {
-    page.push({
-      id: i,
-      username: 'John Doe',
-      content: `Hello world! #${i}`,
-      timestamp: new Date(),
-    });
-  }
-  return page;
+function toMessageData(m: ApiMessage): MessageData {
+  return { id: m.id, username: m.sender.name, content: m.content, timestamp: m.createdAt };
 }
 
 async function onLoad(index: number, done: (stop?: boolean) => void) {
-  const oldest = messages.value[0]?.id ?? null;
-  const page = await fetchMessages(oldest, PAGE_SIZE);
+  const id = channelId.value;
+  const oldest = messages.value[0]?.id;
+  const query =
+    oldest !== undefined ? `?limit=${PAGE_SIZE}&before=${oldest}` : `?limit=${PAGE_SIZE}`;
 
-  messages.value.unshift(...page); // prepend older messages
+  try {
+    const res = await api<{ data: { messages: ApiMessage[]; hasMore: boolean } }>(
+      `/channels/${id}/messages${query}`,
+    );
+    if (id !== channelId.value) return; // the user switched channel while we were loading
 
-  if (index === 1) {
-    // first load: jump to the newest message
-    await nextTick();
-    if (scroller.value) scroller.value.scrollTop = scroller.value.scrollHeight;
+    messages.value.unshift(...res.data.messages.map(toMessageData)); // prepend older messages
+
+    if (index === 1) {
+      // first load: jump to the newest message
+      await nextTick();
+      scrollToBottom();
+    }
+
+    done(!res.data.hasMore); // stop once we've reached the start of the history
+  } catch (e) {
+    done(true);
+    if (e instanceof ApiError && (e.status === 403 || e.status === 404)) {
+      $q.notify({ type: 'negative', message: 'You cannot open this channel' });
+      await router.push('/chat');
+    } else {
+      $q.notify({ type: 'negative', message: errorMessage(e) });
+    }
   }
-
-  // stop once we've reached the beginning of the history
-  done(page.length < PAGE_SIZE || page[0]?.id === 0);
 }
 
 function pageHeight(offset: number) {
@@ -106,16 +115,23 @@ function scrollToBottom() {
   if (el) el.scrollTop = el.scrollHeight;
 }
 
-async function addMessage(message: string) {
-  messages.value.push({
-    id: TOTAL + localCount++,
-    username: user.username,
-    timestamp: new Date(),
-    content: message,
-  });
+async function sendMessage(content: string) {
+  try {
+    const res = await api<{ data: ApiMessage }>(`/channels/${channelId.value}/messages`, {
+      method: 'POST',
+      body: { content },
+    });
+    messages.value.push(toMessageData(res.data));
+    await nextTick();
+    scrollToBottom();
+  } catch (e) {
+    $q.notify({ type: 'negative', message: errorMessage(e) });
+  }
+}
 
-  await nextTick();
-  scrollToBottom();
+// Placeholder until point 4 (commands) is implemented
+function onCommand(name: string) {
+  $q.notify({ type: 'info', message: `/${name} is not implemented yet` });
 }
 </script>
 
