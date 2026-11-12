@@ -80,6 +80,12 @@ const routes = {
     tokens: [[0,"api"],[0,"v1"],[0,"channels"],[1,"id"],[0,"messages"]],
     types: placeholder as Registry['channels.messages.store']['types'],
   },
+  'channels.channels.join': {
+    methods: ["POST"],
+    pattern: '/api/v1/channels/join',
+    tokens: [[0,"api"],[0,"v1"],[0,"channels"],[0,"join"]],
+    types: placeholder as Registry['channels.channels.join']['types'],
+  },
 } as const satisfies Record<string, AdonisEndpoint>
 
 export { routes }

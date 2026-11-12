@@ -44,6 +44,7 @@ router
         router.post('/invites/:id/decline', [controllers.Channels, 'declineInvite'])
         router.get('/:id/messages', [controllers.Messages, 'index'])
         router.post('/:id/messages', [controllers.Messages, 'store'])
+        router.post('/join', [controllers.Channels, 'join'])
       })
       .prefix('channels')
       .as('channels')

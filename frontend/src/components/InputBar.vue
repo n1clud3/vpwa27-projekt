@@ -63,7 +63,7 @@ import { onMounted, onBeforeUnmount, computed, ref } from 'vue';
 import { useCommandsStore } from '@/stores/commands';
 import Message from './Message.vue';
 
-const IS_TYPING_DEMO = true;
+const IS_TYPING_DEMO = false;
 const showTypingModal = ref(false);
 
 const typingUser = ref({
@@ -108,7 +108,8 @@ function submit() {
 
   if (value.startsWith('/')) {
     const [name, ...args] = value.slice(1).split(/\s+/);
-    emit('command', name!.toLowerCase(), args);
+    // emit('command', name!.toLowerCase(), args);
+    commands.byName[name!]!.callback(args);
   } else {
     emit('send', value);
   }

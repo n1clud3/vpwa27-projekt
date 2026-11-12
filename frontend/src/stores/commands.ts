@@ -1,6 +1,6 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
 import { ref } from 'vue';
-import type { Command } from '@/types/commands';
+import { type Command } from '@/types/commands';
 
 export const useCommandsStore = defineStore('commands', () => {
   const list = ref<Command[]>([]);

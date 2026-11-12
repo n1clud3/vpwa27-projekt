@@ -8,4 +8,5 @@ export interface Command {
   availableOutOfChannel: boolean;
   params: Parameter[];
   description?: string;
+  callback: (args: string[]) => void;
 }

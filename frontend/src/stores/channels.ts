@@ -53,6 +53,16 @@ export const useChannelsStore = defineStore('channels', () => {
     return list.value.find((c) => c.id === id);
   }
 
+  async function join(name: string, isPrivate: boolean) {
+    const res = await api<{ data: Channel }>('/channels/join', {
+      method: 'POST',
+      body: { name, isPrivate },
+    });
+    // endpoint is idempotent, so avoid duplicates if already a member
+    if (!list.value.some((c) => c.id === res.data.id)) list.value.unshift(res.data);
+    return res.data;
+  }
+
   function $reset() {
     list.value = [];
     invites.value = [];
@@ -63,6 +73,7 @@ export const useChannelsStore = defineStore('channels', () => {
     invites,
     fetch,
     create,
+    join,
     leave,
     remove,
     respondToInvite,

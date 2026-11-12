@@ -5,7 +5,7 @@ import Channel from '#models/channel'
 import ChannelMember from '#models/channel_member'
 import Invite from '#models/invite'
 import Ban from '#models/ban'
-import { createChannelValidator } from '#validators/channel'
+import { createChannelValidator, joinChannelValidator } from '#validators/channel'
 
 function toDto(channel: Channel, userId: number) {
   return {
@@ -130,5 +130,50 @@ export default class ChannelsController {
     invite.status = 'declined'
     await invite.save()
     return response.noContent()
+  }
+
+  async join({ auth, request, response, serialize }: HttpContext) {
+    const user = auth.getUserOrFail()
+    const { name, isPrivate } = await request.validateUsing(joinChannelValidator)
+
+    const channel = await Channel.query().whereRaw('lower(name) = ?', [name.toLowerCase()]).first()
+
+    // channel doesn't exist -> create it, caller becomes admin
+    if (!channel) {
+      const created = await db.transaction(async (trx) => {
+        const c = await Channel.create(
+          { name, isPrivate: isPrivate ?? false, adminId: user.id },
+          { client: trx }
+        )
+        await ChannelMember.create({ channelId: c.id, userId: user.id }, { client: trx })
+        return c
+      })
+      await created.refresh()
+      return response.status(201).send(await serialize(toDto(created, user.id)))
+    }
+
+    // already a member -> idempotent
+    const existing = await ChannelMember.query()
+      .where('channel_id', channel.id)
+      .where('user_id', user.id)
+      .first()
+    if (existing) return serialize(toDto(channel, user.id))
+
+    if (channel.isPrivate) {
+      return response.forbidden({
+        errors: [{ message: 'This channel is private, you need an invite' }],
+      })
+    }
+
+    const banned = await Ban.query()
+      .where('channel_id', channel.id)
+      .where('banned_user_id', user.id)
+      .first()
+    if (banned) {
+      return response.forbidden({ errors: [{ message: 'You are banned from this channel' }] })
+    }
+
+    await ChannelMember.create({ channelId: channel.id, userId: user.id })
+    return serialize(toDto(channel, user.id))
   }
 }

@@ -16,3 +16,13 @@ export const createChannelValidator = vine.create({
     }),
   isPrivate: vine.boolean().optional(),
 })
+
+export const joinChannelValidator = vine.create({
+  name: vine
+    .string()
+    .trim()
+    .minLength(1)
+    .maxLength(100)
+    .regex(/^[a-zA-Z0-9_-]+$/),
+  isPrivate: vine.boolean().optional(),
+})
