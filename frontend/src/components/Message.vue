@@ -1,5 +1,5 @@
 <template>
-  <q-item class="chat-message q-py-sm" dense>
+  <q-item class="chat-message q-py-sm" :class="{ highlighted }" dense>
     <q-item-section avatar top>
       <q-avatar size="40px" color="primary" text-color="white">
         <img v-if="avatar" :src="avatar" :alt="username" />
@@ -32,6 +32,7 @@ interface Props {
   content: string;
   timestamp?: Date | string | number;
   avatar?: string;
+  highlighted?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -59,5 +60,13 @@ const fullDate = computed(() => date.formatDate(parsed.value, 'DD.MM.YYYY HH:mm:
 }
 .chat-message:hover {
   background: rgba(0, 0, 0, 0.03);
+}
+
+.chat-message.highlighted {
+  background: rgba(0, 77, 64, 0.1);
+  border-left: 3px solid var(--q-primary);
+}
+.chat-message.highlighted:hover {
+  background: rgba(0, 77, 64, 0.15);
 }
 </style>

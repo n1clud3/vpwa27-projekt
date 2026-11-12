@@ -18,6 +18,7 @@
           :username="msg.username"
           :content="msg.content"
           :timestamp="msg.timestamp"
+          :highlighted="msg.mentionsMe"
         />
       </q-infinite-scroll>
     </div>
@@ -27,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth';
 import InputBar from '@/components/InputBar.vue';
 import Message from '@/components/Message.vue';
 import { api, ApiError, errorMessage } from '@/api/client';
@@ -35,24 +37,37 @@ import { useRoute, useRouter } from 'vue-router';
 import { computed, nextTick, ref, watch } from 'vue';
 import { useChannelsStore } from '@/stores/channels';
 
+const auth = useAuthStore();
 const $q = useQuasar();
 const router = useRouter();
 const route = useRoute('/chat/[id]');
 const channels = useChannelsStore();
 
-interface ApiMessage {
-  id: number;
-  content: string;
-  createdAt: string;
-  sender: { id: number; nickName: string; name: string };
-}
+ interface ApiMessage {
+    id: number;
+    content: string;
+    createdAt: string;
+    sender: { id: number; nickName: string; name: string };
+    mentionedUserIds: number[];
+  }
 
-interface MessageData {
-  id: number;
-  username: string;
-  content: string;
-  timestamp: string;
-}
+  interface MessageData {
+    id: number;
+    username: string;
+    content: string;
+    timestamp: string;
+    mentionsMe: boolean;
+  }
+
+  function toMessageData(m: ApiMessage): MessageData {
+    return {
+      id: m.id,
+      username: m.sender.name,
+      content: m.content,
+      timestamp: m.createdAt,
+      mentionsMe: auth.user !== null && m.mentionedUserIds.includes(auth.user.id),
+    };
+  }
 
 const PAGE_SIZE = 30;
 
@@ -70,9 +85,6 @@ watch(
   },
 );
 
-function toMessageData(m: ApiMessage): MessageData {
-  return { id: m.id, username: m.sender.name, content: m.content, timestamp: m.createdAt };
-}
 
 async function onLoad(index: number, done: (stop?: boolean) => void) {
   const id = channelId.value;
@@ -133,6 +145,7 @@ async function sendMessage(content: string) {
 function onCommand(name: string) {
   $q.notify({ type: 'info', message: `/${name} is not implemented yet` });
 }
+
 </script>
 
 <style lang="css" scoped>

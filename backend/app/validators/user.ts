@@ -18,7 +18,13 @@ export const signupValidator = vine.create({
     .minLength(3)
     .maxLength(30)
     .regex(/^[a-zA-Z0-9_]+$/)
-    .unique({ table: 'users', column: 'nick_name' }),
+        .unique(async (db, value) => {
+      const row = await db
+        .from('users')
+        .whereRaw('lower(nick_name) = ?', [value.toLowerCase()])
+        .first()
+      return !row
+    }),
   email: email().unique({ table: 'users', column: 'email' }),
   password: password(),
   passwordConfirmation: password().sameAs('password'),
